@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import Home from "./src/screens/Home";
+import { NavigationContainer } from "@react-navigation/native";
+import TabNavigator from "./src/navigation/TabNavigator";
 
 export default function App() {
   return (
-    <SafeAreaView style={styles.container}>
-      <Home />
-    </SafeAreaView>
+    <NavigationContainer>
+      <TabNavigator />
+    </NavigationContainer>
   );
 }
 
