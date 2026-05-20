@@ -56,7 +56,8 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 22,
-    fontWeight: "bold",
+    fontFamily: "JimNightshade-Regular",
+    fontWeight: "600",
     color: "#4F46E5",
     marginBottom: 8,
   },

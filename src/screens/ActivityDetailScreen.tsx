@@ -18,7 +18,9 @@ const ActivityDetailScreen = ({ route }: any) => {
       <Text style={styles.description}>{activity.description}</Text>
       <Text style={styles.info}>📍 {activity.location}</Text>
       <Text style={styles.info}>📅 {activity.date}</Text>
-      <Text style={styles.info}>👥 Max {activity.maxParticipants} deelnemers</Text>
+      <Text style={styles.info}>
+        👥 Max {activity.maxParticipants} deelnemers
+      </Text>
     </View>
   );
 };
@@ -27,7 +29,12 @@ export default ActivityDetailScreen;
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20, backgroundColor: "#fff" },
-  title: { fontSize: 24, fontWeight: "bold", marginBottom: 12, color: "#111827" },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 12,
+    color: "#111827",
+  },
   description: { fontSize: 16, color: "#374151", marginBottom: 12 },
   info: { fontSize: 14, color: "#4B5563", marginBottom: 6 },
 });
