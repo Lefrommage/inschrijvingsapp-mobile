@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 export type Activity = {
   id: string;
@@ -15,17 +16,25 @@ type ActivityCardProps = {
 };
 
 const ActivityCard = ({ activity }: ActivityCardProps) => {
-  return (
-    <View style={styles.card}>
-      <Text style={styles.cardTitle}>{activity.title}</Text>
-      <Text style={styles.description}>{activity.description}</Text>
+  const navigation = useNavigation<any>();
 
-      <Text style={styles.info}>📍 {activity.location}</Text>
-      <Text style={styles.info}>📅 {activity.date}</Text>
-      <Text style={styles.info}>
-        👥 Max {activity.maxParticipants} deelnemers
-      </Text>
-    </View>
+  const openDetail = () => {
+    navigation.navigate("ActivityDetail", { activity });
+  };
+
+  return (
+    <TouchableOpacity onPress={openDetail} activeOpacity={0.8}>
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>{activity.title}</Text>
+        <Text style={styles.description}>{activity.description}</Text>
+
+        <Text style={styles.info}>📍 {activity.location}</Text>
+        <Text style={styles.info}>📅 {activity.date}</Text>
+        <Text style={styles.info}>
+          👥 Max {activity.maxParticipants} deelnemers
+        </Text>
+      </View>
+    </TouchableOpacity>
   );
 };
 
