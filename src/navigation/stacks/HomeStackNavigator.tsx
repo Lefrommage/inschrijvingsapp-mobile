@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ActivityDetailScreen from "../../screens/ActivityDetailScreen";
 import type { Activity } from "../../components/ActivityCard";
 import HomeScreen from "../../screens/HomeScreen";
+import Header from "../../components/Header";
 
 export type HomeStackParamList = {
   HomePage: undefined;
@@ -14,7 +15,11 @@ const HomeStack = createNativeStackNavigator<HomeStackParamList>();
 
 const HomeStackNavigator = () => {
   return (
-    <HomeStack.Navigator>
+    <HomeStack.Navigator
+      screenOptions={{
+        header: () => <Header title="Home" />,
+      }}
+    >
       <HomeStack.Screen name="HomePage" component={HomeScreen} />
       <HomeStack.Screen
         name="ActivityDetail"
