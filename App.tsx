@@ -1,16 +1,16 @@
 import { StyleSheet, Text, View } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import TabNavigator from "./src/navigation/TabNavigator";
 import { useEffect } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
+import AuthUserProvider from "./src/contexts/AuthUserProvider";
+import RootNavigation from "./src/navigation/RootNavigation";
 
 SplashScreen.preventAutoHideAsync();
-SplashScreen.setOptions({
-  duration: 500,
-  fade: true,
-});
+// SplashScreen.setOptions({
+//   duration: 500,
+//   fade: true,
+// });
 
 export default function App() {
   const [fontLoaded] = useFonts({
@@ -38,9 +38,9 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-      <NavigationContainer>
-        <TabNavigator />
-      </NavigationContainer>
+      <AuthUserProvider>
+        <RootNavigation />
+      </AuthUserProvider>
     </SafeAreaProvider>
   );
 }

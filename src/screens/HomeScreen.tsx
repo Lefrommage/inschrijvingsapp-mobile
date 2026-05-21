@@ -1,9 +1,18 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, FlatList, Modal } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  Modal,
+  Pressable,
+} from "react-native";
 import ActivityCard, { Activity } from "../components/ActivityCard";
 import uuid from "react-native-uuid";
 import EventForm from "./EventForm";
 import { MaterialIcons } from "@expo/vector-icons";
+import { auth } from "../firebase";
+import { signOut } from "firebase/auth";
 
 export type Event = {
   id: string;
@@ -59,6 +68,10 @@ const HomeScreen = () => {
     setModalOpen(false);
   };
 
+  const handleLogout = () => {
+    signOut(auth);
+  };
+
   return (
     <View style={styles.container}>
       <Modal visible={modalOpen}>
@@ -72,7 +85,13 @@ const HomeScreen = () => {
           <EventForm EventFilledIn={addEvent} />
         </View>
       </Modal>
-      <Text style={styles.title}>Inschrijvings App</Text>
+      <View style={styles.header}>
+        <Text style={styles.title}>Inschrijvings App</Text>
+
+        <Pressable style={styles.logoutButton} onPress={handleLogout}>
+          <Text style={styles.logoutText}>Logout</Text>
+        </Pressable>
+      </View>
 
       <FlatList
         data={events}
@@ -125,5 +144,21 @@ const styles = StyleSheet.create({
   modalContent: {
     flex: 1,
     padding: 20,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  logoutButton: {
+    backgroundColor: "#ef4444",
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 8,
+  },
+  logoutText: {
+    color: "white",
+    fontWeight: "bold",
   },
 });

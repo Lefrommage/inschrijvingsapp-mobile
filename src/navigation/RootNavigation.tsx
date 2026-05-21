@@ -4,6 +4,7 @@ import { useAuth } from "../hooks/useAuth";
 import { NavigationContainer } from "@react-navigation/native";
 import HomeScreen from "../screens/HomeScreen";
 import LoginStack from "./stacks/LoginStack";
+import TabNavigator from "./TabNavigator";
 
 const RootNavigation = () => {
   const { user, isLoading } = useAuth();
@@ -14,7 +15,7 @@ const RootNavigation = () => {
 
   return (
     <NavigationContainer>
-      {user ? <HomeScreen /> : <LoginStack />}
+      {user ? <TabNavigator /> : <LoginStack />}
     </NavigationContainer>
   );
 };

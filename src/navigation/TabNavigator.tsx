@@ -41,7 +41,7 @@ const TabNavigator = () => {
         tabBarInactiveTintColor: "grey",
       })}
     >
-      {/* Aanpassen naar HomeStack(Done), FavoritesStack, ProfileStack */}
+      {/* Aanpassen naar HomeStack(Done), FavoritesStack(Done), ProfileStack */}
       <Tab.Screen
         name="Home"
         component={HomeStackNavigator}
