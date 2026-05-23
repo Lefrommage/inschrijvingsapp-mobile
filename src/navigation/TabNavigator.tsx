@@ -1,11 +1,9 @@
-import { StyleSheet, Text, View } from "react-native";
-import HomeScreen from "../screens/HomeScreen";
-import FavoritesScreen from "../screens/FavoritesScreen";
-import ProfileScreen from "../screens/ProfileScreen";
+import { StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import HomeStackNavigator from "./stacks/HomeStackNavigator";
 import FavoriteStackNavigator from "./stacks/FavoriteStackNavigator";
+import ProfileStackNavigator from "./stacks/ProfileStackNavigator";
 
 // Stack
 export type RootTabParamList = {
@@ -41,7 +39,6 @@ const TabNavigator = () => {
         tabBarInactiveTintColor: "grey",
       })}
     >
-      {/* Aanpassen naar HomeStack(Done), FavoritesStack(Done), ProfileStack */}
       <Tab.Screen
         name="Home"
         component={HomeStackNavigator}
@@ -54,11 +51,9 @@ const TabNavigator = () => {
       ></Tab.Screen>
       <Tab.Screen
         name="Profile"
-        component={ProfileScreen}
+        component={ProfileStackNavigator}
         options={{ headerShown: false }}
       ></Tab.Screen>
-      {/* Nog een screen toevoegen */}
-      {/* Misschien nog in het midden een Plus die een event add toevoegen */}
     </Tab.Navigator>
   );
 };

@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ActivityDetailScreen from "../../screens/ActivityDetailScreen";
-import type { Activity } from "../../components/ActivityCard";
+import type { Activity } from "../../services/activityService";
 import HomeScreen from "../../screens/HomeScreen";
 import Header from "../../components/Header";
 

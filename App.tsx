@@ -1,10 +1,13 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { useEffect } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import AuthUserProvider from "./src/contexts/AuthUserProvider";
 import RootNavigation from "./src/navigation/RootNavigation";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { store, persistor } from "./store/store";
 
 SplashScreen.preventAutoHideAsync();
 // SplashScreen.setOptions({
@@ -37,11 +40,15 @@ export default function App() {
   }
 
   return (
-    <SafeAreaProvider>
-      <AuthUserProvider>
-        <RootNavigation />
-      </AuthUserProvider>
-    </SafeAreaProvider>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <SafeAreaProvider>
+          <AuthUserProvider>
+            <RootNavigation />
+          </AuthUserProvider>
+        </SafeAreaProvider>
+      </PersistGate>
+    </Provider>
   );
 }
 

@@ -1,14 +1,22 @@
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
-import React from "react";
+import {
+  Button,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
+import React, { useState } from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 type EventFormProps = {
   EventFilledIn: (
     title: string,
     description: string,
     location: string,
-    date: string,
+    date: Date,
     participants: number,
   ) => void;
 };
@@ -17,15 +25,26 @@ const eventFormSchema = yup.object({
   title: yup.string().required("Titel is verplicht"),
   description: yup.string().required("Beschrijving is verplicht"),
   location: yup.string().required("Locatie is verplicht"),
-  date: yup.string().required("Datum is verplicht"),
   maxParticipants: yup
     .number()
+    .typeError("Aantal deelnemers moet een getal zijn")
     .required("Aantal deelnemers is verplicht")
     .positive("Moet groter zijn dan 0")
     .integer("Moet een geheel getal zijn"),
 });
 
 const EventForm = ({ EventFilledIn }: EventFormProps) => {
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [pickerMode, setPickerMode] = useState<"date" | "time" | null>(null);
+
+  const formattedDate = selectedDate.toLocaleString("nl-BE", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
   return (
     <View>
       <Text style={styles.title}>Nieuw event toevoegen</Text>
@@ -35,7 +54,6 @@ const EventForm = ({ EventFilledIn }: EventFormProps) => {
           title: "",
           description: "",
           location: "",
-          date: "",
           maxParticipants: "",
         }}
         validationSchema={eventFormSchema}
@@ -44,7 +62,7 @@ const EventForm = ({ EventFilledIn }: EventFormProps) => {
             values.title,
             values.description,
             values.location,
-            values.date,
+            selectedDate,
             Number(values.maxParticipants),
           );
         }}
@@ -91,15 +109,39 @@ const EventForm = ({ EventFilledIn }: EventFormProps) => {
               <Text style={styles.error}>{errors.location}</Text>
             )}
 
-            <TextInput
-              style={styles.input}
-              placeholder="Datum bv. 2026-05-20"
-              value={values.date}
-              onChangeText={handleChange("date")}
-              onBlur={handleBlur("date")}
-            />
-            {touched.date && errors.date && (
-              <Text style={styles.error}>{errors.date}</Text>
+            <Text style={styles.label}>Datum en uur</Text>
+            <Text style={styles.dateText}>{formattedDate}</Text>
+
+            <View style={styles.buttonRow}>
+              <View style={styles.buttonWrapper}>
+                <Button
+                  title="Kies datum"
+                  onPress={() => setPickerMode("date")}
+                />
+              </View>
+
+              <View style={styles.buttonWrapper}>
+                <Button
+                  title="Kies uur"
+                  onPress={() => setPickerMode("time")}
+                />
+              </View>
+            </View>
+
+            {pickerMode && (
+              <DateTimePicker
+                value={selectedDate}
+                mode={pickerMode}
+                display={Platform.OS === "ios" ? "spinner" : "default"}
+                is24Hour={true}
+                onChange={(event, date) => {
+                  setPickerMode(null);
+
+                  if (date) {
+                    setSelectedDate(date);
+                  }
+                }}
+              />
             )}
 
             <TextInput
@@ -137,6 +179,22 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 10,
     backgroundColor: "white",
+  },
+  label: {
+    fontWeight: "bold",
+    marginBottom: 6,
+  },
+  dateText: {
+    marginBottom: 10,
+    fontSize: 16,
+  },
+  buttonRow: {
+    flexDirection: "row",
+    gap: 12,
+    marginBottom: 12,
+  },
+  buttonWrapper: {
+    flex: 1,
   },
   error: {
     color: "red",

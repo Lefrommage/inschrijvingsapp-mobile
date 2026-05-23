@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,65 +7,87 @@ import {
   Modal,
   Pressable,
 } from "react-native";
-import ActivityCard, { Activity } from "../components/ActivityCard";
-import uuid from "react-native-uuid";
+import ActivityCard from "../components/ActivityCard";
 import EventForm from "./EventForm";
 import { MaterialIcons } from "@expo/vector-icons";
 import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
-
-export type Event = {
-  id: string;
-  title: string;
-  description: string;
-  location: string;
-  date: string;
-  maxParticipants: number;
-};
+import { useAuth } from "../hooks/useAuth";
+import {
+  Activity,
+  getActivities,
+  addActivity,
+  joinActivity,
+  leaveActivity,
+} from "../services/activityService";
+import { useAppDispatch } from "../../store/hooks";
+import {
+  setFavorites,
+  clearFavorites,
+} from "../features/favorites/favoritesSlice";
+import { getUserFavoriteIds } from "../services/favoriteService";
 
 const HomeScreen = () => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [events, setEvent] = useState<Event[]>([
-    // Verder werken aan plus knopje voor event toe te voegen.
-    {
-      id: "1",
-      title: "Voetbalavond",
-      description: "Samen voetballen in Gent.",
-      location: "Gent",
-      date: "2026-05-20",
-      maxParticipants: 12,
-    },
-    {
-      id: "2",
-      title: "Boardgame Night",
-      description: "Gezellige avond met gezelschapsspellen.",
-      location: "HoGent",
-      date: "2026-05-25",
-      maxParticipants: 8,
-    },
-  ]);
+  const [events, setEvents] = useState<Activity[]>([]);
+  const { user } = useAuth();
 
-  const addEvent = (
+  const dispatch = useAppDispatch();
+
+  async function loadActivities() {
+    const activitiesFromDatabase = await getActivities();
+    setEvents(activitiesFromDatabase);
+  }
+
+  async function loadFavorites() {
+    const userId = auth.currentUser?.uid;
+
+    if (!userId) {
+      dispatch(clearFavorites());
+      return;
+    }
+
+    const favoriteIds = await getUserFavoriteIds(userId);
+    dispatch(setFavorites(favoriteIds));
+  }
+
+  useEffect(() => {
+    loadActivities();
+    loadFavorites();
+  }, []);
+
+  const handleAddEvent = async (
     title: string,
     description: string,
     location: string,
-    date: string,
+    date: Date,
     participants: number,
   ) => {
-    let newEvent: Event = {
-      id: uuid.v4().toString(),
-      title: title,
-      description: description,
-      location: location,
-      date: date,
-      maxParticipants: participants,
-    };
-
-    setEvent((currentEvents) => {
-      return [newEvent, ...currentEvents];
-    });
-
+    await addActivity(title, description, location, date, participants);
+    await loadActivities();
     setModalOpen(false);
+  };
+
+  const handleToggleParticipation = async (
+    activityId: string,
+    isJoined: boolean,
+  ) => {
+    try {
+      if (!user) {
+        alert("Je moet ingelogd zijn om deel te nemen.");
+        return;
+      }
+
+      if (isJoined) {
+        await leaveActivity(activityId, user.uid);
+      } else {
+        await joinActivity(activityId, user.uid);
+      }
+
+      await loadActivities();
+    } catch (error: any) {
+      alert(error.message);
+    }
   };
 
   const handleLogout = () => {
@@ -82,9 +104,11 @@ const HomeScreen = () => {
             style={styles.modalClose}
             onPress={() => setModalOpen(false)}
           />
-          <EventForm EventFilledIn={addEvent} />
+
+          <EventForm EventFilledIn={handleAddEvent} />
         </View>
       </Modal>
+
       <View style={styles.header}>
         <Text style={styles.title}>Inschrijvings App</Text>
 
@@ -96,8 +120,14 @@ const HomeScreen = () => {
       <FlatList
         data={events}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <ActivityCard activity={item} />}
+        renderItem={({ item }) => (
+          <ActivityCard
+            activity={item}
+            onToggleParticipation={handleToggleParticipation}
+          />
+        )}
       />
+
       <MaterialIcons
         name="add"
         size={32}
