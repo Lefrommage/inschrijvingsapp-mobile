@@ -10,10 +10,6 @@ import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from "./store/store";
 
 SplashScreen.preventAutoHideAsync();
-// SplashScreen.setOptions({
-//   duration: 500,
-//   fade: true,
-// });
 
 export default function App() {
   const [fontLoaded] = useFonts({

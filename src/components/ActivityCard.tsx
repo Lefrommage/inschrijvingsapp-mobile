@@ -6,6 +6,7 @@ import {
   Pressable,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../hooks/useAuth";
 import { Activity } from "../services/activityService";
@@ -21,17 +22,23 @@ import {
   addUserFavorite,
   removeUserFavorite,
 } from "../services/favoriteService";
+import type { HomeStackParamList } from "../navigation/stacks/HomeStackNavigator";
 
 type ActivityCardProps = {
   activity: Activity;
   onToggleParticipation?: (activityId: string, isJoined: boolean) => void;
 };
 
+type ActivityCardNavigationProp = NativeStackNavigationProp<
+  HomeStackParamList,
+  "HomePage"
+>;
+
 const ActivityCard = ({
   activity,
   onToggleParticipation,
 }: ActivityCardProps) => {
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation<ActivityCardNavigationProp>();
   const { user } = useAuth();
 
   const dispatch = useAppDispatch();

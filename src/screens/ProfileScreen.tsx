@@ -36,8 +36,11 @@ const ProfileScreen = () => {
       });
 
       Alert.alert("Gelukt", "Je profielnaam is opgeslagen.");
-    } catch (error: any) {
-      Alert.alert("Fout", error.message ?? "Opslaan mislukt.");
+    } catch (error) {
+      Alert.alert(
+        "Fout",
+        error instanceof Error ? error.message : "Opslaan mislukt.",
+      );
     }
   };
 
@@ -55,16 +58,22 @@ const ProfileScreen = () => {
         "Mail verstuurd",
         "Check je inbox om je wachtwoord te resetten.",
       );
-    } catch (error: any) {
-      Alert.alert("Fout", error.message ?? "Wachtwoord reset is mislukt.");
+    } catch (error) {
+      Alert.alert(
+        "Fout",
+        error instanceof Error ? error.message : "Wachtwoord reset is mislukt.",
+      );
     }
   };
 
   const handleLogout = async () => {
     try {
       await signOut(auth);
-    } catch (error: any) {
-      Alert.alert("Fout", error.message ?? "Uitloggen mislukt.");
+    } catch (error) {
+      Alert.alert(
+        "Fout",
+        error instanceof Error ? error.message : "Uitloggen mislukt.",
+      );
     }
   };
 

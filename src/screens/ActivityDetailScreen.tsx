@@ -1,8 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import type { HomeStackParamList } from "../navigation/stacks/HomeStackNavigator";
 
-const ActivityDetailScreen = ({ route }: any) => {
-  const { activity } = route.params || {};
+type Props = NativeStackScreenProps<HomeStackParamList, "ActivityDetail">;
+
+const ActivityDetailScreen = ({ route }: Props) => {
+  const { activity } = route.params;
 
   if (!activity) {
     return (

@@ -85,8 +85,8 @@ const HomeScreen = () => {
       }
 
       await loadActivities();
-    } catch (error: any) {
-      alert(error.message);
+    } catch (error) {
+      alert(error instanceof Error ? error.message : "Actie mislukt.");
     }
   };
 
