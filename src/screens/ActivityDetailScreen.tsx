@@ -1,8 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import type { HomeStackParamList } from "../navigation/stacks/HomeStackNavigator";
 
-const ActivityDetailScreen = ({ route }: any) => {
-  const { activity } = route.params || {};
+type Props = NativeStackScreenProps<HomeStackParamList, "ActivityDetail">;
+
+const ActivityDetailScreen = ({ route }: Props) => {
+  const { activity } = route.params;
 
   if (!activity) {
     return (
@@ -17,7 +21,18 @@ const ActivityDetailScreen = ({ route }: any) => {
       <Text style={styles.title}>{activity.title}</Text>
       <Text style={styles.description}>{activity.description}</Text>
       <Text style={styles.info}>📍 {activity.location}</Text>
-      <Text style={styles.info}>📅 {activity.date}</Text>
+
+      <Text style={styles.info}>
+        📅{" "}
+        {activity.date.toDate().toLocaleString("nl-BE", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        })}
+      </Text>
+
       <Text style={styles.info}>
         👥 Max {activity.maxParticipants} deelnemers
       </Text>
