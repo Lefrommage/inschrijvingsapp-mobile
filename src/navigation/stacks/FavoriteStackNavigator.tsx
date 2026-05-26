@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import FavoritesScreen from "../../screens/FavoritesScreen";
 import ActivityDetailScreen from "../../screens/ActivityDetailScreen";
 import type { Activity } from "../../services/activityService";
+import Header from "../../components/Header";
 
 export type FavoriteStackParamList = {
   FavoritesScreen: undefined;
@@ -14,7 +15,11 @@ const FavoriteStack = createNativeStackNavigator<FavoriteStackParamList>();
 
 const FavoriteStackNavigator = () => {
   return (
-    <FavoriteStack.Navigator>
+    <FavoriteStack.Navigator
+      screenOptions={{
+        header: () => <Header title="Favorites" />,
+      }}
+    >
       <FavoriteStack.Screen
         name="FavoritesScreen"
         component={FavoritesScreen}

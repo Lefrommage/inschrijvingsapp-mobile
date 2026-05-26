@@ -110,8 +110,6 @@ const HomeScreen = () => {
       </Modal>
 
       <View style={styles.header}>
-        <Text style={styles.title}>Inschrijvings App</Text>
-
         <Pressable style={styles.logoutButton} onPress={handleLogout}>
           <Text style={styles.logoutText}>Logout</Text>
         </Pressable>

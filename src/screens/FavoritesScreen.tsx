@@ -25,8 +25,6 @@ const FavoritesScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Favorieten</Text>
-
       {favoriteActivities.length === 0 ? (
         <Text>Je hebt nog geen favorieten.</Text>
       ) : (

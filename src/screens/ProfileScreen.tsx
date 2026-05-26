@@ -20,52 +20,6 @@ const ProfileScreen = () => {
     setDisplayName(user?.displayName ?? "");
   }, [user]);
 
-  const initials = (user?.displayName ?? user?.email ?? "U")
-    .slice(0, 2)
-    .toUpperCase();
-
-  const handleSaveProfile = async () => {
-    if (!auth.currentUser) {
-      Alert.alert("Fout", "Je bent niet ingelogd.");
-      return;
-    }
-
-    try {
-      await updateProfile(auth.currentUser, {
-        displayName: displayName.trim(),
-      });
-
-      Alert.alert("Gelukt", "Je profielnaam is opgeslagen.");
-    } catch (error) {
-      Alert.alert(
-        "Fout",
-        error instanceof Error ? error.message : "Opslaan mislukt.",
-      );
-    }
-  };
-
-  const handleResetPassword = async () => {
-    const email = auth.currentUser?.email;
-
-    if (!email) {
-      Alert.alert("Fout", "Geen e-mailadres beschikbaar voor deze gebruiker.");
-      return;
-    }
-
-    try {
-      await sendPasswordResetEmail(auth, email);
-      Alert.alert(
-        "Mail verstuurd",
-        "Check je inbox om je wachtwoord te resetten.",
-      );
-    } catch (error) {
-      Alert.alert(
-        "Fout",
-        error instanceof Error ? error.message : "Wachtwoord reset is mislukt.",
-      );
-    }
-  };
-
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -134,15 +88,7 @@ const styles = StyleSheet.create({
     color: "#111827",
     marginBottom: 8,
   },
-  input: {
-    borderWidth: 1,
-    borderColor: "#D1D5DB",
-    borderRadius: 12,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    backgroundColor: "#F9FAFB",
-    color: "#111827",
-  },
+
   infoRow: {
     marginBottom: 12,
   },
@@ -167,23 +113,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 8,
   },
-  primaryButtonText: {
-    color: "#111827",
-    fontWeight: "800",
-    fontSize: 15,
-  },
-  secondaryButton: {
-    backgroundColor: "#111827",
-    paddingVertical: 14,
-    borderRadius: 14,
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  secondaryButtonText: {
-    color: "white",
-    fontWeight: "700",
-    fontSize: 15,
-  },
+
   logoutButton: {
     backgroundColor: "#FEE2E2",
     paddingVertical: 14,
